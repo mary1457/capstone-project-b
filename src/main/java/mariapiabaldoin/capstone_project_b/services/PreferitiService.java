@@ -1,6 +1,7 @@
 package mariapiabaldoin.capstone_project_b.services;
 
 
+import mariapiabaldoin.capstone_project_b.entities.CentroEstetico;
 import mariapiabaldoin.capstone_project_b.entities.Cliente;
 import mariapiabaldoin.capstone_project_b.entities.Preferito;
 import mariapiabaldoin.capstone_project_b.exceptions.NotFoundException;
@@ -35,8 +36,11 @@ public class PreferitiService {
         Cliente cliente = (Cliente) utentiRepository.findById(clienteId)
                 .orElseThrow(() -> new NotFoundException(clienteId));
 
+        CentroEstetico centroEstetico = (CentroEstetico) utentiRepository.findById(body.centroEsteticoId())
+                .orElseThrow(() -> new NotFoundException(body.centroEsteticoId()));
 
-        Preferito newPreferito = new Preferito(body.nameBeautyCenter(), body.address(), cliente);
+
+        Preferito newPreferito = new Preferito(body.nameBeautyCenter(), body.address(), cliente, centroEstetico);
 
 
         return this.preferitiRepository.save(newPreferito);

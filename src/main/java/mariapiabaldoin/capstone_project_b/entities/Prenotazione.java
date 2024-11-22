@@ -6,37 +6,41 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "preferiti")
+@Table(name = "prenotazioni")
 @Getter
 @Setter
 @ToString
-public class Preferito {
+
+public class Prenotazione {
 
     @Id
     @GeneratedValue
     @Setter(AccessLevel.NONE)
     private UUID id;
-    private String nameBeautyCenter;
-    private String address;
+
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
-    @OneToOne
-    @JoinColumn(name = "centroEstetico_id")
+
+    @ManyToOne
+    @JoinColumn(name = "centro_estetico_id")
     private CentroEstetico centroEstetico;
 
 
-    public Preferito() {
+    private LocalDateTime data;
+
+
+    public Prenotazione() {
+
     }
 
-    public Preferito(String nameBeautyCenter, String address, Cliente cliente, CentroEstetico centroEstetico) {
-
-        this.nameBeautyCenter = nameBeautyCenter;
-        this.address = address;
+    public Prenotazione(Cliente cliente, CentroEstetico centroEstetico, LocalDateTime data) {
         this.cliente = cliente;
         this.centroEstetico = centroEstetico;
+        this.data = data;
     }
 }
