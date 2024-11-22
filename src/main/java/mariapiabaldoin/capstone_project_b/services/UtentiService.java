@@ -106,7 +106,6 @@ public class UtentiService {
         found.setName(body.name());
         found.setSurname(body.surname());
         found.setEmail(body.email());
-        found.setPassword(body.password());
         found.setAvatar("https://ui-avatars.com/api/?name=" + body.name() + "+" + body.surname());
 
 
