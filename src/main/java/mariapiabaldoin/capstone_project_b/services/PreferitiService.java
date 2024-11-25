@@ -30,7 +30,7 @@ public class PreferitiService {
     @Autowired
     private PasswordEncoder bcrypt;
 
-    public Preferito savePreferito(UUID clienteId, PreferitoDTO body) {
+    public Preferito save(UUID clienteId, PreferitoDTO body) {
 
 
         Cliente cliente = (Cliente) utentiRepository.findById(clienteId)
@@ -40,7 +40,7 @@ public class PreferitiService {
                 .orElseThrow(() -> new NotFoundException(body.centroEsteticoId()));
 
 
-        Preferito newPreferito = new Preferito(body.nameBeautyCenter(), body.address(), cliente, centroEstetico);
+        Preferito newPreferito = new Preferito(cliente, centroEstetico);
 
 
         return this.preferitiRepository.save(newPreferito);
@@ -71,7 +71,7 @@ public class PreferitiService {
 
         Preferito found = this.findByIdAndIdCliente(preferitoId, clienteId);
         if (found == null) {
-            throw new UnauthorizedException("Azione non possibile");
+            throw new UnauthorizedException("Action not possible");
         }
         this.preferitiRepository.delete(found);
     }

@@ -6,6 +6,7 @@ import mariapiabaldoin.capstone_project_b.entities.Prenotazione;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,5 +16,7 @@ public interface PrenotazioniRepository extends JpaRepository<Prenotazione, UUID
     List<Prenotazione> findByCliente(Cliente cliente);
 
     Prenotazione findByIdAndCliente(UUID prenotazioneId, Cliente cliente);
+
+    Prenotazione findByData(LocalDateTime data);
 }
 

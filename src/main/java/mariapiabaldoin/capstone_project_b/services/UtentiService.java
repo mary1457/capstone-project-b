@@ -7,10 +7,11 @@ import mariapiabaldoin.capstone_project_b.entities.Trattamento;
 import mariapiabaldoin.capstone_project_b.entities.Utente;
 import mariapiabaldoin.capstone_project_b.exceptions.BadRequestException;
 import mariapiabaldoin.capstone_project_b.exceptions.NotFoundException;
-import mariapiabaldoin.capstone_project_b.payloads.NewCentroEsteticoDTO;
-import mariapiabaldoin.capstone_project_b.payloads.NewClienteDTO;
-import mariapiabaldoin.capstone_project_b.payloads.ResultDTO;
+import mariapiabaldoin.capstone_project_b.payloads.CentroEsteticoDTO;
+import mariapiabaldoin.capstone_project_b.payloads.ClienteDTO;
+import mariapiabaldoin.capstone_project_b.payloads.ClienteUpdateDTO;
 import mariapiabaldoin.capstone_project_b.repositories.UtentiRepository;
+import mariapiabaldoin.capstone_project_b.response.ResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,49 +34,49 @@ public class UtentiService {
     @Autowired
     private PasswordEncoder bcrypt;
 
-    public ResultDTO saveCliente(NewClienteDTO body) {
+    public ResultResponse saveCliente(ClienteDTO body) {
 
         this.utentiRepository.findByEmail(body.email()).ifPresent(
 
                 utente -> {
-                    throw new BadRequestException("Email " + body.email() + " già in uso!");
+                    throw new BadRequestException("Email " + body.email() + " is already in use");
                 }
         );
 
 
-        String avatar = "https://ui-avatars.com/api/?name=" + body.name() + "+" + body.surname();
+        String avatar = "https://ui-avatars.com/api/?name=" + body.nome() + "+" + body.cognome();
 
 
-        Utente newUtente = new Cliente(body.name(), body.surname(), body.email(), bcrypt.encode(body.password()));
+        Utente newUtente = new Cliente(body.nome(), body.cognome(), body.email(), bcrypt.encode(body.password()));
 
         newUtente.setAvatar(avatar);
 
         this.utentiRepository.save(newUtente);
 
-        return new ResultDTO("Registrazione", true);
+        return new ResultResponse("Registration successfully completed", true);
     }
 
 
-    public ResultDTO saveCentroEstetico(NewCentroEsteticoDTO body) {
+    public ResultResponse saveCentroEstetico(CentroEsteticoDTO body) {
 
         this.utentiRepository.findByEmail(body.email()).ifPresent(
 
                 utente -> {
-                    throw new BadRequestException("Email " + body.email() + " già in uso!");
+                    throw new BadRequestException("Email " + body.email() + " is already in use");
                 }
         );
 
 
-        String avatar = "https://ui-avatars.com/api/?name=" + body.name() + "+" + body.surname();
+        String avatar = "https://ui-avatars.com/api/?name=" + body.nome() + "+" + body.cognome();
 
 
-        Utente newUtente = new CentroEstetico(body.name(), body.surname(), body.email(), bcrypt.encode(body.password()), body.nameBeautyCenter(), body.address(), body.city(), body.trattamenti());
+        Utente newUtente = new CentroEstetico(body.nome(), body.cognome(), body.email(), bcrypt.encode(body.password()), body.nomeCentroEstetico(), body.indirizzo(), body.citta(), body.trattamento());
 
         newUtente.setAvatar(avatar);
 
         this.utentiRepository.save(newUtente);
 
-        return new ResultDTO("Registrazione", true);
+        return new ResultResponse("Registration successfully completed", true);
     }
 
     public Page<Utente> findAll(int page, int size, String sortBy) {
@@ -88,7 +90,7 @@ public class UtentiService {
         return this.utentiRepository.findById(utenteId).orElseThrow(() -> new NotFoundException(utenteId));
     }
 
-    public Utente findByIdAndUpdate(UUID utenteId, NewClienteDTO body) {
+    public Utente findByIdAndUpdate(UUID utenteId, ClienteUpdateDTO body) {
 
         Utente found = this.findById(utenteId);
 
@@ -97,16 +99,16 @@ public class UtentiService {
             this.utentiRepository.findByEmail(body.email()).ifPresent(
 
                     user -> {
-                        throw new BadRequestException("Email " + body.email() + " già in uso!");
+                        throw new BadRequestException("Email " + body.email() + " is already in use");
                     }
             );
         }
 
 
-        found.setName(body.name());
-        found.setSurname(body.surname());
+        found.setNome(body.nome());
+        found.setCognome(body.cognome());
         found.setEmail(body.email());
-        found.setAvatar("https://ui-avatars.com/api/?name=" + body.name() + "+" + body.surname());
+        found.setAvatar("https://ui-avatars.com/api/?name=" + body.nome() + "+" + body.cognome());
 
 
         return this.utentiRepository.save(found);
@@ -120,13 +122,15 @@ public class UtentiService {
 
 
     public Utente findByEmail(String email) {
-        return this.utentiRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("L'utente con email " + email + " non è stato trovato"));
+        return this.utentiRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("The user with email " + email + " was not found"));
     }
 
 
-    public List<CentroEstetico> searchByTrattamentiAndCity(Trattamento trattamenti, String city) {
-        return utentiRepository.findByTrattamentiAndCityAndAbilitato(trattamenti, city, true);
+    public List<CentroEstetico> searchByTrattamentoCittaAndData(Trattamento trattamento, String citta, LocalDateTime dataInizio, LocalDateTime dataFine) {
+        return utentiRepository.findDisponibiliByTrattamentoCittaAbilitatoAndData(trattamento, citta, true, dataInizio, dataFine);
     }
+
+
 }
 
 

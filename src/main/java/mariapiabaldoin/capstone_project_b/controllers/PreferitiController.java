@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/preferiti")
+@RequestMapping("/fav")
 public class PreferitiController {
     @Autowired
     private PreferitiService preferitiService;
@@ -27,7 +27,7 @@ public class PreferitiController {
 
     @GetMapping("/me")
     @ResponseBody
-    public List<Preferito> getPreferito(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
+    public List<Preferito> get(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
         return this.preferitiService.findByIdCliente(currentAuthenticatedUtente.getId());
 
 
@@ -40,10 +40,10 @@ public class PreferitiController {
         if (validationResult.hasErrors()) {
             String message = validationResult.getAllErrors().stream().map(objectError -> objectError.getDefaultMessage())
                     .collect(Collectors.joining(". "));
-            throw new BadRequestException("Ci sono stati errori nel payload! " + message);
+            throw new BadRequestException("There were errors in the payload " + message);
         }
 
-        return this.preferitiService.savePreferito(currentAuthenticatedUtente.getId(), body);
+        return this.preferitiService.save(currentAuthenticatedUtente.getId(), body);
     }
 
     @DeleteMapping("/{preferitoId}")

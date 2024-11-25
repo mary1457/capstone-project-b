@@ -18,24 +18,23 @@ import java.util.UUID;
 @Setter
 @ToString
 @NoArgsConstructor
-
 public abstract class Utente implements UserDetails {
     @Id
     @GeneratedValue
     @Setter(AccessLevel.NONE)
     private UUID id;
-    private String name;
-    private String surname;
+    private String nome;
+    private String cognome;
     private String avatar;
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
 
-    public Utente(String name, String surname, String email, String password) {
+    public Utente(String nome, String cognome, String email, String password) {
 
-        this.name = name;
-        this.surname = surname;
+        this.nome = nome;
+        this.cognome = cognome;
         this.email = email;
         this.password = password;
         this.ruolo = Ruolo.USER;

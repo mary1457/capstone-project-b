@@ -1,13 +1,12 @@
 package mariapiabaldoin.capstone_project_b.services;
 
 
-import mariapiabaldoin.capstone_project_b.entities.CentroEstetico;
-import mariapiabaldoin.capstone_project_b.entities.Cliente;
-import mariapiabaldoin.capstone_project_b.entities.Prenotazione;
+import mariapiabaldoin.capstone_project_b.entities.*;
 import mariapiabaldoin.capstone_project_b.exceptions.BadRequestException;
 import mariapiabaldoin.capstone_project_b.exceptions.NotFoundException;
 import mariapiabaldoin.capstone_project_b.exceptions.UnauthorizedException;
 import mariapiabaldoin.capstone_project_b.payloads.PrenotazioneDTO;
+import mariapiabaldoin.capstone_project_b.repositories.DisponibilitaRepository;
 import mariapiabaldoin.capstone_project_b.repositories.PrenotazioniRepository;
 import mariapiabaldoin.capstone_project_b.repositories.UtentiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,9 @@ public class PrenotazioniService {
     @Autowired
     private PrenotazioniRepository prenotazioniRepository;
 
+    @Autowired
+    private DisponibilitaRepository disponibilitaRepository;
+
 
     public Prenotazione save(UUID clienteId, PrenotazioneDTO body) {
 
@@ -39,10 +41,13 @@ public class PrenotazioniService {
 
 
         if (LocalDateTime.now().isBefore(body.data())) {
+            this.findByData(body.data());
             Prenotazione newPrenotazione = new Prenotazione(cliente, centroEstetico, body.data());
+            Disponibilita newDisponibilita = new Disponibilita(centroEstetico, body.data(), Stato.PRENOTATO);
+            this.disponibilitaRepository.save(newDisponibilita);
             return this.prenotazioniRepository.save(newPrenotazione);
         } else {
-            throw new BadRequestException("La data " + body.data() + " non può essere antecedente ad oggi");
+            throw new BadRequestException("The date " + body.data() + " cannot be earlier than today");
         }
 
 
@@ -73,10 +78,21 @@ public class PrenotazioniService {
     public void findByIdAndDelete(UUID prenotazioneId, UUID clienteId) {
 
         Prenotazione found = this.findByIdAndIdCliente(prenotazioneId, clienteId);
+
         if (found == null) {
-            throw new UnauthorizedException("Azione non possibile");
+            throw new UnauthorizedException("Action not possible");
         }
+
         this.prenotazioniRepository.delete(found);
+      
+    }
+
+    public void findByData(LocalDateTime data) {
+
+        Prenotazione found = this.prenotazioniRepository.findByData(data);
+        if (found != null) {
+            throw new UnauthorizedException("Action not possible");
+        }
     }
 
 

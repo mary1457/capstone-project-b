@@ -29,7 +29,7 @@ public class AuthService {
         if (found instanceof CentroEstetico) {
             CentroEstetico centro = (CentroEstetico) found;
             if (!centro.isAbilitato()) {
-                throw new UnauthorizedException("Centro non abilitato!");
+                throw new UnauthorizedException("Beauty center not enabled");
             }
         }
         if (bcrypt.matches(body.password(), found.getPassword())) {
@@ -39,7 +39,7 @@ public class AuthService {
             return accessToken;
         } else {
 
-            throw new UnauthorizedException("Credenziali errate!");
+            throw new UnauthorizedException("Incorrect credentials");
         }
     }
 

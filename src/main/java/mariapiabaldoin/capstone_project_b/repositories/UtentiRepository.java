@@ -5,8 +5,11 @@ import mariapiabaldoin.capstone_project_b.entities.CentroEstetico;
 import mariapiabaldoin.capstone_project_b.entities.Trattamento;
 import mariapiabaldoin.capstone_project_b.entities.Utente;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,8 +19,22 @@ import java.util.UUID;
 public interface UtentiRepository extends JpaRepository<Utente, UUID> {
     Optional<Utente> findByEmail(String email);
 
-
-    List<CentroEstetico> findByTrattamentiAndCityAndAbilitato(Trattamento trattamenti, String city, boolean abilitato);
+    @Query("""
+            SELECT DISTINCT ce
+            FROM CentroEstetico ce
+            LEFT JOIN FETCH ce.disponibilita d
+            WHERE ce.trattamento = :trattamento
+              AND ce.citta = :citta
+              AND ce.abilitato = :abilitato
+              AND (d.data BETWEEN :dataInizio AND :dataFine OR d IS NULL)
+            """)
+    List<CentroEstetico> findDisponibiliByTrattamentoCittaAbilitatoAndData(
+            @Param("trattamento") Trattamento trattamento,
+            @Param("citta") String citta,
+            @Param("abilitato") boolean abilitato,
+            @Param("dataInizio") LocalDateTime datainizio,
+            @Param("dataFine") LocalDateTime dataFine
+    );
 
 
 }

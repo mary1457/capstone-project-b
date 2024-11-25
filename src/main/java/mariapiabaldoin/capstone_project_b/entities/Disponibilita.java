@@ -1,5 +1,7 @@
 package mariapiabaldoin.capstone_project_b.entities;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -9,39 +11,33 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "prenotazioni")
+@Table(name = "disponibilita")
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-public class Prenotazione {
-
+public class Disponibilita {
     @Id
     @GeneratedValue
     @Setter(AccessLevel.NONE)
     private UUID id;
-
-    @ManyToOne
-    @JoinColumn(name = "cliente_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Cliente cliente;
-
     @ManyToOne
     @JoinColumn(name = "centro_estetico_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private CentroEstetico centroEstetico;
-
-
     private LocalDateTime data;
+    @Enumerated(EnumType.STRING)
+    private Stato stato;
 
-    @OneToOne(mappedBy = "prenotazione", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne
+    @JoinColumn(name = "prenotazione_id")
+    @JsonIgnore
+    private Prenotazione prenotazione;
 
-    private Disponibilita disponibilita;
-
-
-    public Prenotazione(Cliente cliente, CentroEstetico centroEstetico, LocalDateTime data) {
-        this.cliente = cliente;
+    public Disponibilita(CentroEstetico centroEstetico, LocalDateTime data, Stato stato) {
         this.centroEstetico = centroEstetico;
         this.data = data;
+        this.stato = stato;
     }
 }

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/prenotazioni")
+@RequestMapping("/res")
 public class PrenotazioniController {
     @Autowired
     private PrenotazioniService prenotazioniService;
@@ -27,7 +27,7 @@ public class PrenotazioniController {
 
     @GetMapping("/me")
     @ResponseBody
-    public List<Prenotazione> getPrenotazioni(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
+    public List<Prenotazione> get(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
         return this.prenotazioniService.findByIdCliente(currentAuthenticatedUtente.getId());
 
 

@@ -1,10 +1,9 @@
 package mariapiabaldoin.capstone_project_b.entities;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.UUID;
 
@@ -13,29 +12,24 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class Preferito {
 
     @Id
     @GeneratedValue
     @Setter(AccessLevel.NONE)
     private UUID id;
-    private String nameBeautyCenter;
-    private String address;
     @ManyToOne
     @JoinColumn(name = "cliente_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Cliente cliente;
     @OneToOne
     @JoinColumn(name = "centroEstetico_id")
     private CentroEstetico centroEstetico;
 
 
-    public Preferito() {
-    }
+    public Preferito(Cliente cliente, CentroEstetico centroEstetico) {
 
-    public Preferito(String nameBeautyCenter, String address, Cliente cliente, CentroEstetico centroEstetico) {
-
-        this.nameBeautyCenter = nameBeautyCenter;
-        this.address = address;
         this.cliente = cliente;
         this.centroEstetico = centroEstetico;
     }

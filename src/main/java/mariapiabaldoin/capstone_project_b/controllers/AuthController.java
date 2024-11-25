@@ -2,7 +2,11 @@ package mariapiabaldoin.capstone_project_b.controllers;
 
 
 import mariapiabaldoin.capstone_project_b.exceptions.BadRequestException;
-import mariapiabaldoin.capstone_project_b.payloads.*;
+import mariapiabaldoin.capstone_project_b.payloads.CentroEsteticoDTO;
+import mariapiabaldoin.capstone_project_b.payloads.ClienteDTO;
+import mariapiabaldoin.capstone_project_b.payloads.UtenteLoginDTO;
+import mariapiabaldoin.capstone_project_b.response.ResultResponse;
+import mariapiabaldoin.capstone_project_b.response.UtenteLoginResponse;
 import mariapiabaldoin.capstone_project_b.services.AuthService;
 import mariapiabaldoin.capstone_project_b.services.UtentiService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +26,18 @@ public class AuthController {
     private UtentiService utentiService;
 
     @PostMapping("/login")
-    public UtenteLoginResponseDTO login(@RequestBody UtenteLoginDTO body) {
-        return new UtenteLoginResponseDTO(this.authService.checkCredentialsAndGenerateToken(body));
+    public UtenteLoginResponse login(@RequestBody UtenteLoginDTO body) {
+        return new UtenteLoginResponse(this.authService.checkCredentialsAndGenerateToken(body));
     }
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResultDTO save(@RequestBody @Validated NewClienteDTO body, BindingResult validationResult) {
+    public ResultResponse save(@RequestBody @Validated ClienteDTO body, BindingResult validationResult) {
 
         if (validationResult.hasErrors()) {
             String message = validationResult.getAllErrors().stream().map(objectError -> objectError.getDefaultMessage())
                     .collect(Collectors.joining(". "));
-            throw new BadRequestException("Ci sono stati errori nel payload! " + message);
+            throw new BadRequestException("There are errors in the payload " + message);
         }
 
         return this.utentiService.saveCliente(body);
@@ -41,12 +45,12 @@ public class AuthController {
 
     @PostMapping("/registerBeautyCenter")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResultDTO save(@RequestBody @Validated NewCentroEsteticoDTO body, BindingResult validationResult) {
+    public ResultResponse save(@RequestBody @Validated CentroEsteticoDTO body, BindingResult validationResult) {
 
         if (validationResult.hasErrors()) {
             String message = validationResult.getAllErrors().stream().map(objectError -> objectError.getDefaultMessage())
                     .collect(Collectors.joining(". "));
-            throw new BadRequestException("Ci sono stati errori nel payload! " + message);
+            throw new BadRequestException("There are errors in the payload " + message);
         }
 
         return this.utentiService.saveCentroEstetico(body);

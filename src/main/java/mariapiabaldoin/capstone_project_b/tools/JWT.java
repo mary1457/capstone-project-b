@@ -31,7 +31,7 @@ public class JWT {
                     .build().parse(accessToken);
 
         } catch (Exception ex) {
-            throw new UnauthorizedException("Problemi con il token! Per favore effettua di nuovo il login!");
+            throw new UnauthorizedException("Problems with the token! Please log in again");
         }
     }
 
