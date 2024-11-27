@@ -2,6 +2,7 @@ package mariapiabaldoin.capstone_project_b.controllers;
 
 
 import mariapiabaldoin.capstone_project_b.entities.CentroEstetico;
+import mariapiabaldoin.capstone_project_b.entities.Cliente;
 import mariapiabaldoin.capstone_project_b.entities.Trattamento;
 import mariapiabaldoin.capstone_project_b.entities.Utente;
 import mariapiabaldoin.capstone_project_b.payloads.ClienteUpdateDTO;
@@ -62,5 +63,10 @@ public class UtentiController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
         this.utentiService.findByIdAndDelete(currentAuthenticatedUtente.getId());
+    }
+
+    @GetMapping("/client")
+    public List<Cliente> getClient(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
+        return this.utentiService.searchClientiByCentroEstetico(currentAuthenticatedUtente.getId());
     }
 }

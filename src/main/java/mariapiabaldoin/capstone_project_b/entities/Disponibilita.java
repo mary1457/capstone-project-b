@@ -32,12 +32,14 @@ public class Disponibilita {
 
     @OneToOne
     @JoinColumn(name = "prenotazione_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Prenotazione prenotazione;
 
-    public Disponibilita(CentroEstetico centroEstetico, LocalDateTime data, Stato stato) {
+    public Disponibilita(CentroEstetico centroEstetico, LocalDateTime data, Stato stato, Prenotazione prenotazione) {
         this.centroEstetico = centroEstetico;
         this.data = data;
         this.stato = stato;
+        this.prenotazione = prenotazione;
     }
 }

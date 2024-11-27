@@ -32,25 +32,32 @@ public class PrenotazioniService {
 
     public Prenotazione save(UUID clienteId, PrenotazioneDTO body) {
 
-
         Cliente cliente = (Cliente) utentiRepository.findById(clienteId)
                 .orElseThrow(() -> new NotFoundException(clienteId));
+
 
         CentroEstetico centroEstetico = (CentroEstetico) utentiRepository.findById(body.centroEsteticoId())
                 .orElseThrow(() -> new NotFoundException(body.centroEsteticoId()));
 
 
         if (LocalDateTime.now().isBefore(body.data())) {
+
             this.findByData(body.data());
+
+
             Prenotazione newPrenotazione = new Prenotazione(cliente, centroEstetico, body.data());
-            Disponibilita newDisponibilita = new Disponibilita(centroEstetico, body.data(), Stato.PRENOTATO);
+
+
+            Prenotazione salvata = this.prenotazioniRepository.save(newPrenotazione);
+
+            Disponibilita newDisponibilita = new Disponibilita(centroEstetico, body.data(), Stato.PRENOTATO, salvata);
             this.disponibilitaRepository.save(newDisponibilita);
-            return this.prenotazioniRepository.save(newPrenotazione);
+            return salvata;
+
+
         } else {
             throw new BadRequestException("The date " + body.data() + " cannot be earlier than today");
         }
-
-
     }
 
 
@@ -83,9 +90,17 @@ public class PrenotazioniService {
             throw new UnauthorizedException("Action not possible");
         }
 
-        this.prenotazioniRepository.delete(found);
-      
+
+        Disponibilita disponibilita = disponibilitaRepository.findByPrenotazione(found);
+        if (disponibilita != null) {
+
+            disponibilitaRepository.delete(disponibilita);
+        }
+
+
+        prenotazioniRepository.delete(found);
     }
+
 
     public void findByData(LocalDateTime data) {
 
@@ -93,6 +108,14 @@ public class PrenotazioniService {
         if (found != null) {
             throw new UnauthorizedException("Action not possible");
         }
+    }
+
+    public List<Prenotazione> getPrenotazioniOggi(UUID centroEsteticoId) {
+        return prenotazioniRepository.findPrenotazioniOggiByCentroEstetico(centroEsteticoId);
+    }
+
+    public List<Prenotazione> getPrenotazioniMese(UUID centroEsteticoId) {
+        return prenotazioniRepository.findPrenotazioniMeseCorrenteByCentroEstetico(centroEsteticoId);
     }
 
 

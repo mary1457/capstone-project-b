@@ -24,6 +24,7 @@ public class CentroEstetico extends Utente {
     private Trattamento trattamento;
 
     @OneToMany(mappedBy = "centroEstetico", cascade = CascadeType.ALL, orphanRemoval = true)
+
     @ToString.Exclude
     private List<Disponibilita> disponibilita;
 

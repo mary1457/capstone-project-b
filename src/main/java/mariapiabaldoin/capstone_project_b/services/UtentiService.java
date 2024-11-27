@@ -131,6 +131,10 @@ public class UtentiService {
     }
 
 
+    public List<Cliente> searchClientiByCentroEstetico(UUID centroEsteticoId) {
+        return utentiRepository.findClientiPrenotazioneInCentroEstetico(centroEsteticoId);
+    }
+
 }
 
 

@@ -34,14 +34,12 @@ public class Prenotazione {
 
     private LocalDateTime data;
 
-    @OneToOne(mappedBy = "prenotazione", cascade = CascadeType.ALL, orphanRemoval = true)
-
-    private Disponibilita disponibilita;
-
 
     public Prenotazione(Cliente cliente, CentroEstetico centroEstetico, LocalDateTime data) {
         this.cliente = cliente;
         this.centroEstetico = centroEstetico;
         this.data = data;
     }
+
+
 }

@@ -2,6 +2,7 @@ package mariapiabaldoin.capstone_project_b.repositories;
 
 
 import mariapiabaldoin.capstone_project_b.entities.CentroEstetico;
+import mariapiabaldoin.capstone_project_b.entities.Cliente;
 import mariapiabaldoin.capstone_project_b.entities.Trattamento;
 import mariapiabaldoin.capstone_project_b.entities.Utente;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,6 +36,12 @@ public interface UtentiRepository extends JpaRepository<Utente, UUID> {
             @Param("dataInizio") LocalDateTime datainizio,
             @Param("dataFine") LocalDateTime dataFine
     );
+
+    @Query("SELECT DISTINCT c FROM Cliente c " +
+            "JOIN Prenotazione p ON c.id = p.cliente.id " +
+            "WHERE p.centroEstetico.id = :centroEsteticoId " +
+            "ORDER BY c.email ASC")
+    List<Cliente> findClientiPrenotazioneInCentroEstetico(@Param("centroEsteticoId") UUID centroEsteticoId);
 
 
 }

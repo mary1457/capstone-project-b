@@ -51,4 +51,20 @@ public class PrenotazioniController {
     public void findByIdAndDelete(@AuthenticationPrincipal Utente currentAuthenticatedUtente, @PathVariable UUID prenotazioneId) {
         this.prenotazioniService.findByIdAndDelete(prenotazioneId, currentAuthenticatedUtente.getId());
     }
+
+    @GetMapping("/today")
+    @ResponseBody
+    public List<Prenotazione> getResToday(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
+        return this.prenotazioniService.getPrenotazioniOggi(currentAuthenticatedUtente.getId());
+
+
+    }
+
+    @GetMapping("/month")
+    @ResponseBody
+    public List<Prenotazione> getResMonth(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
+        return this.prenotazioniService.getPrenotazioniMese(currentAuthenticatedUtente.getId());
+
+
+    }
 }
