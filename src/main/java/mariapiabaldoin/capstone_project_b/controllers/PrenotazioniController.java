@@ -40,7 +40,7 @@ public class PrenotazioniController {
         if (validationResult.hasErrors()) {
             String message = validationResult.getAllErrors().stream().map(objectError -> objectError.getDefaultMessage())
                     .collect(Collectors.joining(". "));
-            throw new BadRequestException("Ci sono stati errori nel payload! " + message);
+            throw new BadRequestException("Invalid input:  " + message);
         }
 
         return this.prenotazioniService.save(currentAuthenticatedUtente.getId(), body);
@@ -54,7 +54,7 @@ public class PrenotazioniController {
 
     @GetMapping("/today")
     @ResponseBody
-    public List<Prenotazione> getResToday(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
+    public List<Prenotazione> getToday(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
         return this.prenotazioniService.getPrenotazioniOggi(currentAuthenticatedUtente.getId());
 
 
@@ -62,7 +62,7 @@ public class PrenotazioniController {
 
     @GetMapping("/month")
     @ResponseBody
-    public List<Prenotazione> getResMonth(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
+    public List<Prenotazione> getMonth(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
         return this.prenotazioniService.getPrenotazioniMese(currentAuthenticatedUtente.getId());
 
 

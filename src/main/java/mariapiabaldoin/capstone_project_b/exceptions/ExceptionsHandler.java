@@ -29,7 +29,7 @@ public class ExceptionsHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorsDTO handleGeneric(Exception ex) {
         ex.printStackTrace();
-        return new ErrorsDTO("Server problem", LocalDateTime.now());
+        return new ErrorsDTO("Internal Server Error", LocalDateTime.now());
     }
 
     @ExceptionHandler(UnauthorizedException.class)
@@ -41,6 +41,6 @@ public class ExceptionsHandler {
     @ExceptionHandler(AuthorizationDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorsDTO handleForbidden(AuthorizationDeniedException ex) {
-        return new ErrorsDTO("You do not have permission to access", LocalDateTime.now());
+        return new ErrorsDTO("Forbidden", LocalDateTime.now());
     }
 }

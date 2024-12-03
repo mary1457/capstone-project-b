@@ -56,7 +56,7 @@ public class PrenotazioniService {
 
 
         } else {
-            throw new BadRequestException("The date " + body.data() + " cannot be earlier than today");
+            throw new BadRequestException("The date cannot be earlier than today");
         }
     }
 

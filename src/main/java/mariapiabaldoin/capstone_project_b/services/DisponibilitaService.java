@@ -25,7 +25,7 @@ public class DisponibilitaService {
     private DisponibilitaRepository disponibilitaRepository;
 
 
-    public List<Disponibilita> findByIdCEntroEsteticoAndStato(UUID centroEsteticoId) {
+    public List<Disponibilita> findByIdCentroEsteticoAndStato(UUID centroEsteticoId) {
 
         CentroEstetico centroEstetico = (CentroEstetico) utentiRepository.findById(centroEsteticoId)
                 .orElseThrow(() -> new NotFoundException(centroEsteticoId));

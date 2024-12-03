@@ -58,7 +58,7 @@ public class AuthService {
             }
         }
 
-        // Se la password non corrisponde
+
         throw new UnauthorizedException("Incorrect credentials");
     }
 }

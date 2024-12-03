@@ -23,8 +23,8 @@ public class CentroEstetico extends Utente {
     @Enumerated(EnumType.STRING)
     private Trattamento trattamento;
 
-    @OneToMany(mappedBy = "centroEstetico", cascade = CascadeType.ALL, orphanRemoval = true)
 
+    @OneToMany(mappedBy = "centroEstetico")
     @ToString.Exclude
     private List<Disponibilita> disponibilita;
 

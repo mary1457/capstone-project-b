@@ -27,7 +27,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public UtenteLoginResponse login(@RequestBody UtenteLoginDTO body) {
-        
+
         return this.authService.checkCredentialsAndGenerateToken(body);
     }
 
@@ -38,7 +38,7 @@ public class AuthController {
         if (validationResult.hasErrors()) {
             String message = validationResult.getAllErrors().stream().map(objectError -> objectError.getDefaultMessage())
                     .collect(Collectors.joining(". "));
-            throw new BadRequestException("There are errors in the payload " + message);
+            throw new BadRequestException("Invalid input:  " + message);
         }
 
         return this.utentiService.saveCliente(body);
@@ -51,7 +51,7 @@ public class AuthController {
         if (validationResult.hasErrors()) {
             String message = validationResult.getAllErrors().stream().map(objectError -> objectError.getDefaultMessage())
                     .collect(Collectors.joining(". "));
-            throw new BadRequestException("There are errors in the payload " + message);
+            throw new BadRequestException("Invalid input:  " + message);
         }
 
         return this.utentiService.saveCentroEstetico(body);

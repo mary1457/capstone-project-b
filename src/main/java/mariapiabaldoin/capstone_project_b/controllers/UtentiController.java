@@ -28,7 +28,7 @@ public class UtentiController {
 
     @GetMapping("/search")
     @ResponseBody
-    public List<CentroEstetico> getRicerca(
+    public List<CentroEstetico> getSearch(
             @RequestParam(required = false) Trattamento trattamento,
             @RequestParam(required = false) String citta,
             @RequestParam(required = false) String data) {
@@ -45,14 +45,15 @@ public class UtentiController {
         }
 
 
-        throw new IllegalArgumentException("The treatments, city, and date parameters are required for this search.");
+        throw new IllegalArgumentException("The treatments, city, and date parameters are required for this search");
     }
 
 
     @GetMapping("/me")
-    public Utente get(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
-        return currentAuthenticatedUtente;
+    public Cliente get(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
+        return (Cliente) currentAuthenticatedUtente;
     }
+
 
     @PutMapping("/me")
     public Utente update(@AuthenticationPrincipal Utente currentAuthenticatedUtente, @RequestBody @Validated ClienteUpdateDTO body) {
@@ -65,8 +66,8 @@ public class UtentiController {
         this.utentiService.findByIdAndDelete(currentAuthenticatedUtente.getId());
     }
 
-    @GetMapping("/client")
-    public List<Cliente> getClient(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
+    @GetMapping("/clients")
+    public List<Cliente> getClients(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
         return this.utentiService.searchClientiByCentroEstetico(currentAuthenticatedUtente.getId());
     }
 }

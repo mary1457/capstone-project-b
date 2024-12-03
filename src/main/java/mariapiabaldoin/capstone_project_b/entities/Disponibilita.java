@@ -21,11 +21,13 @@ public class Disponibilita {
     @GeneratedValue
     @Setter(AccessLevel.NONE)
     private UUID id;
+
     @ManyToOne
     @JoinColumn(name = "centro_estetico_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private CentroEstetico centroEstetico;
+    
     private LocalDateTime data;
     @Enumerated(EnumType.STRING)
     private Stato stato;

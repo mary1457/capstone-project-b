@@ -7,10 +7,10 @@ import java.util.UUID;
 
 public record PrenotazioneDTO(
 
-        @NotNull(message = "The beauty center ID is required!")
+        @NotNull(message = "The beauty center ID is required")
         UUID centroEsteticoId,
 
-        @NotNull(message = "The treatment date is required!")
+        @NotNull(message = "The treatment date is required")
         LocalDateTime data
 
 ) {

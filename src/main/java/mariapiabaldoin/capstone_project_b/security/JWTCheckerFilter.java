@@ -35,7 +35,7 @@ public class JWTCheckerFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer "))
-            throw new UnauthorizedException("Inserire token nell'Authorization Header nel formato corretto!");
+            throw new UnauthorizedException("Insert the token in the Authorization Header in the correct format");
 
 
         String accessToken = authHeader.substring(7);

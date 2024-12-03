@@ -8,13 +8,13 @@ import java.util.UUID;
 
 public record DisponibilitaDTO(
 
-        @NotNull(message = "The beauty center ID is required!")
+        @NotNull(message = "The beauty center ID is required")
         UUID centroEsteticoId,
 
-        @NotNull(message = "The availability date is required!")
+        @NotNull(message = "The availability date is required")
         LocalDateTime data,
 
-        @NotNull(message = "The availability status is required!")
+        @NotNull(message = "The availability status is required")
         Stato stato
 
 ) {

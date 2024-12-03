@@ -40,7 +40,7 @@ public class PreferitiController {
         if (validationResult.hasErrors()) {
             String message = validationResult.getAllErrors().stream().map(objectError -> objectError.getDefaultMessage())
                     .collect(Collectors.joining(". "));
-            throw new BadRequestException("There were errors in the payload " + message);
+            throw new BadRequestException("Invalid input:  " + message);
         }
 
         return this.preferitiService.save(currentAuthenticatedUtente.getId(), body);

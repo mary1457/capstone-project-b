@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public record PreferitoDTO(
 
-        @NotNull(message = "The beauty center ID is required!")
+        @NotNull(message = "The beauty center ID is required")
         UUID centroEsteticoId
 
 ) {

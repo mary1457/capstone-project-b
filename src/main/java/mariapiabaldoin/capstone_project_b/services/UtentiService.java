@@ -1,10 +1,6 @@
 package mariapiabaldoin.capstone_project_b.services;
 
-
-import mariapiabaldoin.capstone_project_b.entities.CentroEstetico;
-import mariapiabaldoin.capstone_project_b.entities.Cliente;
-import mariapiabaldoin.capstone_project_b.entities.Trattamento;
-import mariapiabaldoin.capstone_project_b.entities.Utente;
+import mariapiabaldoin.capstone_project_b.entities.*;
 import mariapiabaldoin.capstone_project_b.exceptions.BadRequestException;
 import mariapiabaldoin.capstone_project_b.exceptions.NotFoundException;
 import mariapiabaldoin.capstone_project_b.payloads.CentroEsteticoDTO;
@@ -23,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UtentiService {
@@ -126,16 +123,39 @@ public class UtentiService {
     }
 
 
-    public List<CentroEstetico> searchByTrattamentoCittaAndData(Trattamento trattamento, String citta, LocalDateTime dataInizio, LocalDateTime dataFine) {
-        return utentiRepository.findDisponibiliByTrattamentoCittaAbilitatoAndData(trattamento, citta, true, dataInizio, dataFine);
-    }
-
-
     public List<Cliente> searchClientiByCentroEstetico(UUID centroEsteticoId) {
         return utentiRepository.findClientiPrenotazioneInCentroEstetico(centroEsteticoId);
     }
 
+    public List<CentroEstetico> searchByTrattamentoCittaAndData(
+            Trattamento trattamento,
+            String citta,
+            LocalDateTime dataInizio,
+            LocalDateTime dataFine) {
+
+        // 1. Recupera i centri estetici che corrispondono ai filtri
+        List<CentroEstetico> centriEstetici = utentiRepository.findCentroEsteticoDisponibili(
+                trattamento, citta, true);
+
+        // 2. Recupera tutte le disponibilità per i centri estetici
+        List<UUID> centroIds = centriEstetici.stream()
+                .map(CentroEstetico::getId)
+                .collect(Collectors.toList());
+
+        List<Disponibilita> disponibilita = utentiRepository.findDisponibilitaForCentriEstetici(
+                centroIds, dataInizio, dataFine);
+
+        // 3. Aggiungi le disponibilità ai centri estetici
+        for (CentroEstetico centro : centriEstetici) {
+            List<Disponibilita> disponibilitaCentri = disponibilita.stream()
+                    .filter(d -> d.getCentroEstetico().getId().equals(centro.getId()))
+                    .collect(Collectors.toList());
+
+            centro.setDisponibilita(disponibilitaCentri);
+        }
+
+        return centriEstetici;
+    }
+
+
 }
-
-
-
