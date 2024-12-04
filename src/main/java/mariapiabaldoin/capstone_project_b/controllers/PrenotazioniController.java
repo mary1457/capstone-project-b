@@ -60,10 +60,10 @@ public class PrenotazioniController {
 
     }
 
-    @GetMapping("/month")
+    @GetMapping("/calendar")
     @ResponseBody
-    public List<Prenotazione> getMonth(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
-        return this.prenotazioniService.getPrenotazioniMese(currentAuthenticatedUtente.getId());
+    public List<Prenotazione> getCalendar(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
+        return this.prenotazioniService.getPrenotazioni(currentAuthenticatedUtente.getId());
 
 
     }

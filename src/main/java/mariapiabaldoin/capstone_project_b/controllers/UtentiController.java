@@ -5,10 +5,12 @@ import mariapiabaldoin.capstone_project_b.entities.CentroEstetico;
 import mariapiabaldoin.capstone_project_b.entities.Cliente;
 import mariapiabaldoin.capstone_project_b.entities.Trattamento;
 import mariapiabaldoin.capstone_project_b.entities.Utente;
+import mariapiabaldoin.capstone_project_b.payloads.CentroEsteticoUpdateDTO;
 import mariapiabaldoin.capstone_project_b.payloads.ClienteUpdateDTO;
 import mariapiabaldoin.capstone_project_b.services.UtentiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -69,5 +71,12 @@ public class UtentiController {
     @GetMapping("/clients")
     public List<Cliente> getClients(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
         return this.utentiService.searchClientiByCentroEstetico(currentAuthenticatedUtente.getId());
+    }
+
+
+    @GetMapping("/centroEstetico")
+    public ResponseEntity<CentroEsteticoUpdateDTO> getCentroEsteticoById(@AuthenticationPrincipal Utente currentAuthenticatedUtente) {
+        CentroEsteticoUpdateDTO dto = utentiService.getCentroEsteticoUpadateDTOById(currentAuthenticatedUtente.getId());
+        return ResponseEntity.ok(dto);
     }
 }

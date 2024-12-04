@@ -114,8 +114,8 @@ public class PrenotazioniService {
         return prenotazioniRepository.findPrenotazioniOggiByCentroEstetico(centroEsteticoId);
     }
 
-    public List<Prenotazione> getPrenotazioniMese(UUID centroEsteticoId) {
-        return prenotazioniRepository.findPrenotazioniMeseCorrenteByCentroEstetico(centroEsteticoId);
+    public List<Prenotazione> getPrenotazioni(UUID centroEsteticoId) {
+        return prenotazioniRepository.findPrenotazioniByCentroEstetico(centroEsteticoId);
     }
 
 

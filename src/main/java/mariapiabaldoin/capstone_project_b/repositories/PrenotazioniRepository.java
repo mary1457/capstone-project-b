@@ -30,10 +30,8 @@ public interface PrenotazioniRepository extends JpaRepository<Prenotazione, UUID
 
     @Query("SELECT p FROM Prenotazione p " +
             "WHERE p.centroEstetico.id = :centroEsteticoId " +
-            "AND EXTRACT(MONTH FROM p.data) = EXTRACT(MONTH FROM CURRENT_DATE) " +
-            "AND EXTRACT(YEAR FROM p.data) = EXTRACT(YEAR FROM CURRENT_DATE) " +
             "ORDER BY p.data ASC")
-    List<Prenotazione> findPrenotazioniMeseCorrenteByCentroEstetico(@Param("centroEsteticoId") UUID centroEsteticoId);
+    List<Prenotazione> findPrenotazioniByCentroEstetico(@Param("centroEsteticoId") UUID centroEsteticoId);
 
 }
 

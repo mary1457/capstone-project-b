@@ -4,8 +4,10 @@ import mariapiabaldoin.capstone_project_b.entities.*;
 import mariapiabaldoin.capstone_project_b.exceptions.BadRequestException;
 import mariapiabaldoin.capstone_project_b.exceptions.NotFoundException;
 import mariapiabaldoin.capstone_project_b.payloads.CentroEsteticoDTO;
+import mariapiabaldoin.capstone_project_b.payloads.CentroEsteticoUpdateDTO;
 import mariapiabaldoin.capstone_project_b.payloads.ClienteDTO;
 import mariapiabaldoin.capstone_project_b.payloads.ClienteUpdateDTO;
+import mariapiabaldoin.capstone_project_b.repositories.CentroEsteticoRepository;
 import mariapiabaldoin.capstone_project_b.repositories.UtentiRepository;
 import mariapiabaldoin.capstone_project_b.response.ResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class UtentiService {
 
     @Autowired
     private UtentiRepository utentiRepository;
+
+    @Autowired
+    private CentroEsteticoRepository centroEsteticoRepository;
 
 
     @Autowired
@@ -133,11 +138,11 @@ public class UtentiService {
             LocalDateTime dataInizio,
             LocalDateTime dataFine) {
 
-        // 1. Recupera i centri estetici che corrispondono ai filtri
+       
         List<CentroEstetico> centriEstetici = utentiRepository.findCentroEsteticoDisponibili(
                 trattamento, citta, true);
 
-        // 2. Recupera tutte le disponibilità per i centri estetici
+
         List<UUID> centroIds = centriEstetici.stream()
                 .map(CentroEstetico::getId)
                 .collect(Collectors.toList());
@@ -145,7 +150,7 @@ public class UtentiService {
         List<Disponibilita> disponibilita = utentiRepository.findDisponibilitaForCentriEstetici(
                 centroIds, dataInizio, dataFine);
 
-        // 3. Aggiungi le disponibilità ai centri estetici
+
         for (CentroEstetico centro : centriEstetici) {
             List<Disponibilita> disponibilitaCentri = disponibilita.stream()
                     .filter(d -> d.getCentroEstetico().getId().equals(centro.getId()))
@@ -155,6 +160,11 @@ public class UtentiService {
         }
 
         return centriEstetici;
+    }
+
+
+    public CentroEsteticoUpdateDTO getCentroEsteticoUpadateDTOById(UUID id) {
+        return centroEsteticoRepository.findCentroEsteticoUpadateDTOById(id);
     }
 
 
