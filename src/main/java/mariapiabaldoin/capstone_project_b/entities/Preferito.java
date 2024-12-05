@@ -25,6 +25,7 @@ public class Preferito {
     private Cliente cliente;
     @OneToOne
     @JoinColumn(name = "centroEstetico_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private CentroEstetico centroEstetico;
 
 

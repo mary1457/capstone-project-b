@@ -6,8 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import mariapiabaldoin.capstone_project_b.entities.Trattamento;
 
-public record CentroEsteticoUpdateDTO(
+import java.util.UUID;
 
+public record CentroEsteticoUpdateDTO(
         @NotEmpty(message = "The name is required")
         @Size(min = 2, max = 40, message = "The name must be between 2 and 40 characters")
         String nome,
@@ -19,7 +20,6 @@ public record CentroEsteticoUpdateDTO(
         @NotEmpty(message = "The email is required")
         @Email(message = "The entered email is not valid")
         String email,
-
 
         @NotEmpty(message = "The beauty center name is required")
         @Size(min = 2, max = 40, message = "The beauty center name must be between 2 and 40 characters")
@@ -36,8 +36,8 @@ public record CentroEsteticoUpdateDTO(
         @NotNull(message = "The beauty center treatment is required")
         Trattamento trattamento,
 
-        String avatar
-
+        @NotNull(message = "The beauty center ID is required")
+        UUID centroEsteticoId
 
 ) {
 }

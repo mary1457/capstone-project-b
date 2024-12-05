@@ -16,5 +16,9 @@ public interface PreferitiRepository extends JpaRepository<Preferito, UUID> {
 
 
     Preferito findByIdAndCliente(UUID preferitoId, Cliente cliente);
+
+    List<Preferito> findByCentroEsteticoId(UUID centroEsteticoId);
+
+    void deleteByCentroEsteticoId(UUID centroEsteticoId);
 }
 
