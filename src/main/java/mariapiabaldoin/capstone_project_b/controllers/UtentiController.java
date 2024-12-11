@@ -42,8 +42,7 @@ public class UtentiController {
 
         LocalDateTime dataInizio = localDate.atTime(LocalTime.of(9, 0));
         LocalDateTime dataFine = localDate.atTime(LocalTime.of(18, 0));
-        System.out.println(dataInizio);
-        System.out.println(dataFine);
+       
 
         if (trattamento != null && citta != null && data != null) {
             return utentiService.searchByTrattamentoCittaAndData(trattamento, citta, dataInizio, dataFine);
